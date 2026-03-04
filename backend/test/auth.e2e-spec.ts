@@ -42,6 +42,13 @@ describe('Auth (e2e)', () => {
       .expect(400);
   });
 
+  it('POST /auth/check-email - should return 409 if email is already taken', () => {
+    return request(app.getHttpServer())
+      .post('/auth/check-email')
+      .send({ email: 'taken@test.com' })
+      .expect(409);
+  });
+
   afterEach(async () => {
     await app.close();
   });
