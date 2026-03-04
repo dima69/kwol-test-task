@@ -20,4 +20,11 @@ describe('Auth (e2e)', () => {
     expect(app).toBeDefined();
   });
 
+  it('POST /auth/check-email - should return 204 if email is valid', () => {
+    return request(app.getHttpServer())
+      .post('/auth/check-email')
+      .send({ email: 'test@test.com' })
+      .expect(204);
+  });
+
 });
