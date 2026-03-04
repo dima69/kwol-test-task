@@ -41,4 +41,8 @@ describe('Auth (e2e)', () => {
       .post('/auth/check-email')
       .expect(400);
   });
+
+  afterEach(async () => {
+    await app.close();
+  });
 });
