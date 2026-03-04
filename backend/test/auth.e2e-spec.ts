@@ -28,4 +28,17 @@ describe('Auth (e2e)', () => {
       .expect(204);
   });
 
+  it('POST /auth/check-email - should return 400 if email is invalid', () => {
+    return request(app.getHttpServer())
+      .post('/auth/check-email')
+      .send({ email: 'invalidemail' })
+      .expect(400);
+  });
+
+  it('POST /auth/check-email - should return 400 if no params provided', () => {
+    // prettier-ignore
+    return request(app.getHttpServer())
+      .post('/auth/check-email')
+      .expect(400);
+  });
 });
