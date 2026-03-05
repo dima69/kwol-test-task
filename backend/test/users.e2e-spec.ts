@@ -59,6 +59,23 @@ describe('Users (e2e)', () => {
       data: { email: 'delete@test.com', name: 'emma', password: 'password' },
     });
 
-    return request(app.getHttpServer()).delete(`/users/${user.id}`).expect(200);
+    // prettier-ignore
+    return request(app.getHttpServer())
+      .delete(`/users/${user.id}`)
+      .expect(200);
+  });
+
+  it('DELETE /users/:id - should return 404 if user not found', () => {
+    // prettier-ignore
+    return request(app.getHttpServer())
+      .delete('/users/99999')
+      .expect(404);
+  });
+
+  it('DELETE /users/:id - should return 400 if id is not a number', () => {
+    // prettier-ignore
+    return request(app.getHttpServer())
+      .delete('/users/abc')
+      .expect(400);
   });
 });
