@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat";
+  --shadow-default:
+    0px 0px 16px rgba(0, 0, 0, 0.08), 0px 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+html,
+body {
+  @apply bg-[#E7EAFA];
+}
