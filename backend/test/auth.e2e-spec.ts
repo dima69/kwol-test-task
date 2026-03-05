@@ -82,10 +82,17 @@ describe('Auth (e2e)', () => {
       .expect(400);
   });
 
-  it('POST /auth/register - should return 400 if name is too short', () => {
+  it('POST /auth/register - should return 400 if name is empty', () => {
     return request(app.getHttpServer())
       .post('/auth/register')
-      .send({ email: 'test@test.com', name: 'a', password: 'password' })
+      .send({ email: 'test@test.com', name: '', password: 'password' })
+      .expect(400);
+  });
+
+  it('POST /auth/register - should return 400 if password is empty', () => {
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'test@test.com', name: '', password: 'password' })
       .expect(400);
   });
 
