@@ -15,8 +15,7 @@ WORKDIR /app
 RUN npm run build
 
 FROM node:20-alpine
-COPY ./package.json package-lock.json /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
+RUN npm install -g serve
+COPY --from=build-env /app/build/client /app/build/client
 WORKDIR /app
-CMD ["npm", "run", "start"]
+CMD ["serve", "-s", "build/client", "-l", "3000"]
