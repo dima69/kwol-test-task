@@ -74,4 +74,47 @@ describe('Auth (e2e)', () => {
       })
       .expect(201);
   });
+
+  it('POST /auth/register - should return 400 if no body provided', () => {
+    // prettier-ignore
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .expect(400);
+  });
+
+  it('POST /auth/register - should return 400 if name is too short', () => {
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'test@test.com', name: 'a', password: 'password' })
+      .expect(400);
+  });
+
+  it('POST /auth/register - should return 400 if password is too short', () => {
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'test@test.com', name: 'emma', password: 'p' })
+      .expect(400);
+  });
+
+  it('POST /auth/register - should return 409 if email already taken', async () => {
+    await prisma.user.create({ data: { email: 'taken@test.com' } });
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'taken@test.com', name: 'emma', password: 'password' })
+      .expect(409);
+  });
+
+  it('POST /auth/register - should not return password in response', async () => {
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({
+        email: 'newuser@test.com',
+        name: 'emma',
+        password: 'PasswordAbc',
+      })
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.password).toBeUndefined();
+      });
+  });
 });
