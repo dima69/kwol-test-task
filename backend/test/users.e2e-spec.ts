@@ -38,4 +38,19 @@ describe('Users (e2e)', () => {
       .expect(200)
       .expect([]);
   });
+
+  it('GET /users - should return list of users', async () => {
+    await prisma.user.create({
+      data: { email: 'emma@test.com', name: 'emma', password: 'password' },
+    });
+    return request(app.getHttpServer())
+      .get('/users')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+        expect(res.body[0].email).toBeDefined();
+        expect(res.body[0].name).toBeDefined();
+        expect(res.body[0].password).toBeUndefined();
+      });
+  });
 });
