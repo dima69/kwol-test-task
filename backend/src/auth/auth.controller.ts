@@ -8,7 +8,7 @@ export class AuthController {
 
   @Post('check-email')
   @HttpCode(204)
-  checkEmail(@Body() dto: CheckEmailDto) {
-    this.authService.checkEmail(dto.email);
+  async checkEmail(@Body() dto: CheckEmailDto) {
+    await this.authService.checkEmail(dto.email);
   }
 }

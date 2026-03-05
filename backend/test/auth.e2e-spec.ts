@@ -1,13 +1,16 @@
+import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AuthModule } from '../src/auth/auth.module';
 import request from 'supertest';
 import { App } from 'supertest/types';
+import { PrismaService } from '../src/prisma/prisma.service';
 
 describe('Auth (e2e)', () => {
   let app: INestApplication<App>;
+  let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AuthModule],
     }).compile();
@@ -15,6 +18,17 @@ describe('Auth (e2e)', () => {
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
+
+    prisma = app.get(PrismaService);
+  });
+
+  beforeEach(async () => {
+    await prisma.user.deleteMany();
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('should be defined', () => {
@@ -42,14 +56,11 @@ describe('Auth (e2e)', () => {
       .expect(400);
   });
 
-  it('POST /auth/check-email - should return 409 if email is already taken', () => {
+  it('POST /auth/check-email - should return 409 if email is already taken', async () => {
+    await prisma.user.create({ data: { email: 'taken@test.com' } });
     return request(app.getHttpServer())
       .post('/auth/check-email')
       .send({ email: 'taken@test.com' })
       .expect(409);
-  });
-
-  afterEach(async () => {
-    await app.close();
   });
 });
