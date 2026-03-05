@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { UsersModule } from '../src/users/users.module';
 
 describe('Users (e2e)', () => {
   let app: INestApplication<App>;
@@ -12,7 +12,7 @@ describe('Users (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [UsersModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
