@@ -63,4 +63,15 @@ describe('Auth (e2e)', () => {
       .send({ email: 'taken@test.com' })
       .expect(409);
   });
+
+  it('POST /auth/register - should return 201 and create user', () => {
+    return request(app.getHttpServer())
+      .post('/auth/register')
+      .send({
+        email: 'emma@test.com',
+        name: 'emma',
+        password: 'password',
+      })
+      .expect(201);
+  });
 });
