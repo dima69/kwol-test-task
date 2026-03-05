@@ -53,4 +53,12 @@ describe('Users (e2e)', () => {
         expect(res.body[0].password).toBeUndefined();
       });
   });
+
+  it('DELETE /users/:id - should delete user and return 200', async () => {
+    const user = await prisma.user.create({
+      data: { email: 'delete@test.com', name: 'emma', password: 'password' },
+    });
+
+    return request(app.getHttpServer()).delete(`/users/${user.id}`).expect(200);
+  });
 });
